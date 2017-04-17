@@ -7,7 +7,7 @@ VPATH=./src/
 EXEC=memristor
 OBJDIR=./obj/
 
-CC=g++
+CC=c++
 NVCC=nvcc
 OPTS=-Ofast
 LDFLAGS= -lm -pthread 
