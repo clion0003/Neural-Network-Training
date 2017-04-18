@@ -44,6 +44,9 @@ namespace mlp{
 			index++;
 			sample.push_back(((float_t)pixel)/256);
 			if (index % (28 * 28) == 0){
+				for (int i = 0; i < 32 * 32 - 28 * 28; i++){
+					sample.push_back(255.0);
+				}
 				data.push_back(sample);
 				sample.clear();
 			}

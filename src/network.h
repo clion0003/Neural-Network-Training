@@ -8,6 +8,8 @@
 #include "output_layer.h"
 #include "mnist_parser.h"
 #include "fullyconnected_layer.h"
+#include "convolutional_layer.h"
+#include "maxpooling_layer.h"
 #include "fstream"
 #include "iostream"
 
@@ -18,7 +20,7 @@
 
 
 namespace mlp{
-#define MAX_ITER 800
+#define MAX_ITER 2
 #define FIX_NUMBER 25
 #define M 50
 #define END_CONDITION 1e-2
@@ -350,7 +352,7 @@ namespace mlp{
 			test_x_ = test_x, test_y_ = test_y, test_size_ = test_size;
 			int iter = 0;
 			int bang = 0;
-			while (iter < test_size_){
+			while (iter < test_size){
 				if (test_once(iter)) bang++;
 				iter++;
 			}
@@ -388,17 +390,48 @@ namespace mlp{
 			}
 		}
 
+		//void fout_weight(std::ofstream &ofile)
+		//{
+		//	for (auto layer : layers){
+		//		ofile << layer->in_depth_ << " " << layer->out_depth_ << std::endl;
+		//		for (int i = 0; i < layer->out_depth_; i++){
+		//			for(int j = 0; j < layer->in_depth_; j++)
+		//			{
+		//				ofile << layer->W_[i*layer->in_depth_ + j] << " ";
+		//			}
+		//			ofile << layer->b_[i] << std::endl;
+		//		}
+		//	}
+		//}
+
+		//void fin_weight(std::ifstream &infile)
+		//{
+		//	for (auto layer : layers)
+		//	{
+		//		int in_depth, out_depth;
+		//		infile >> in_depth >> out_depth;
+		//		for (int i = 0; i < out_depth; i++){
+		//			for (int j = 0; j < in_depth;j++)
+		//			{
+		//				infile >> layer->W_[i*in_depth + j];
+		//			}
+		//			infile >> layer->b_[i];
+		//		}
+		//	}
+		//	
+		//}
+
 		void fout_weight(std::ofstream &ofile)
 		{
 			for (auto layer : layers){
-				ofile << layer->in_depth_ << " " << layer->out_depth_ << std::endl;
-				for (int i = 0; i < layer->out_depth_; i++){
-					for(int j = 0; j < layer->in_depth_; j++)
-					{
-						ofile << layer->W_[i*layer->in_depth_ + j] << " ";
-					}
-					ofile << layer->b_[i] << std::endl;
+				for (int i = 0; i < layer->W_.size(); i++){
+					ofile << layer->W_[i] << " ";
 				}
+				ofile << std::endl;
+				for (int i = 0; i < layer->b_.size(); i++){
+					ofile << layer->b_[i] << " ";
+				}
+				ofile << std::endl;
 			}
 		}
 
@@ -406,13 +439,11 @@ namespace mlp{
 		{
 			for (auto layer : layers)
 			{
-				int in_depth, out_depth;
-				infile >> in_depth >> out_depth;
-				for (int i = 0; i < out_depth; i++){
-					for (int j = 0; j < in_depth;j++)
-					{
-						infile >> layer->W_[i*in_depth + j];
-					}
+				for (int i = 0; i < layer->W_.size(); i++){
+					infile >> layer->W_[i];
+				}
+
+				for (int i = 0; i < layer->b_.size(); i++){
 					infile >> layer->b_[i];
 				}
 			}

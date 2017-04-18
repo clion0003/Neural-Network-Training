@@ -10,9 +10,9 @@
 using namespace mlp;
 using namespace std;
 
-//#define GENERATE_WEIGHT
+#define GENERATE_WEIGHT
 //#define GENERATE_FAULT
-#define RETRAIN
+//#define RETRAIN
 
 int main(int argc,char* argv[]){
 	vec2d_t train_x;
@@ -24,25 +24,21 @@ int main(int argc,char* argv[]){
 	LOAD_MNIST_TEST(test_x, test_y);
 	LOAD_MNIST_TRAIN(train_x, train_y);
 	
-	/*使用神经网络拟合XOR函数，快速验证神经网络正确性*/
-	//vec2d_t XOR_x = { { 0, 0, 0, 0 }, { 0, 1, 1, 1 }, { 1, 0, 0, 0 }, { 1, 1, 1, 1 } };
-	//vec_t XOR_y = { 0, 1, 1, 0 };
-	
-	//Mlp n(0.03, 0.01);
+	Mlp n(0.03, 0.01);
 
-	/*拟合XOR参数：*/
-	//n.add_layer(new FullyConnectedLayer(4, 10, new sigmoid_activation));
-	//n.add_layer(new FullyConnectedLayer(10, 1, new sigmoid_activation));
+	n.add_layer(new ConvolutionalLayer(32, 32, 1, 5, 6, new sigmoid_activation));
+	n.add_layer(new MaxpoolingLayer(28, 28, 6, new sigmoid_activation));
+	n.add_layer(new ConvolutionalLayer(14, 14, 6, 5, 16, new sigmoid_activation));
+	n.add_layer(new MaxpoolingLayer(10, 10, 16, new sigmoid_activation));
+	n.add_layer(new ConvolutionalLayer(5, 5, 16, 5, 100, new sigmoid_activation));
+	n.add_layer(new FullyConnectedLayer(100, 10, new sigmoid_activation));
 
-	//n.train(XOR_x, XOR_y, 4);
-
-	/*MNIST拟合：*/
-	//n.add_layer(new FullyConnectedLayer(28 *28, 10, new sigmoid_activation));
 #ifdef GENERATE_WEIGHT
 	n.train(train_x, train_y, 60000);
 	std::ofstream weight_file("weight.txt");
 	n.fout_weight(weight_file);
 	n.test(test_x,test_y,10000);
+	weight_file.close();
 #else
 //	std::ifstream weight_file("weight.txt");
 //	n.fin_weight(weight_file);
@@ -121,7 +117,7 @@ int main(int argc,char* argv[]){
 	
 	//ofile.close();
 #if defined(_WIN32) || defined(_WIN64)
-	getchar();
+	//getchar();
 #endif
 	return 0;
 }
