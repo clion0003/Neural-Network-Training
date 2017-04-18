@@ -20,7 +20,7 @@
 
 
 namespace mlp{
-#define MAX_ITER 2
+#define MAX_ITER 500
 #define FIX_NUMBER 25
 #define M 50
 #define END_CONDITION 1e-2

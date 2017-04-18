@@ -33,8 +33,8 @@ namespace mlp{
 			W_.resize(kernel_size * kernel_size * in_maps * out_maps);
 			W_fix.resize(kernel_size * kernel_size * in_maps * out_maps);
 			deltaW_.resize(kernel_size * kernel_size * in_maps * out_maps);
-			b_.resize(out_maps * out_maps* out_height);
-			b_fix.resize(out_maps * out_maps* out_height);
+			b_.resize(out_maps * out_width * out_height);
+			b_fix.resize(out_maps * out_width * out_height);
 			output_.resize(out_maps * out_width * out_height);
 			g_.resize(in_width * in_height * in_maps);
 			this->init_weight();
